@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+.env
+data/
+*.db
+*.db-shm
+*.db-wal
+nest-backup-*.json
+test-results/
+playwright-report/
+.npm-cache/
+.DS_Store
