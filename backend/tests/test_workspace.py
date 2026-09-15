@@ -135,3 +135,14 @@ def test_import_rejects_ids_that_cannot_be_addressed_by_routes(client):
     backup = client.get("/api/export").json()
     backup["tracks"][0]["id"] = "invalid/route"
     assert client.post("/api/import", json=backup).status_code == 422
+
+
+def test_note_code_indentation_and_trailing_newlines_survive_roundtrip(client, tmp_path):
+    content = "    print('keep indentation')\n\n"
+    response = client.post("/api/entries", json={"kind": "note", "title": "代码笔记", "content": content})
+    assert response.status_code == 201
+    assert response.json()["content"] == content
+    backup = client.get("/api/export").json()
+    with TestClient(create_app(tmp_path / "restored.db", demo=False)) as target:
+        assert target.post("/api/import", json=backup).status_code == 200
+        assert target.get("/api/workspace").json()["entries"][0]["content"] == content

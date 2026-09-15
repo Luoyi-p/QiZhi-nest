@@ -1,8 +1,8 @@
 from datetime import datetime
-from typing import Literal
+from typing import Annotated, Literal
 from urllib.parse import urlsplit
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, StringConstraints, field_validator
 
 
 class Model(BaseModel):
@@ -31,7 +31,7 @@ class Track(TrackInput):
 class EntryInput(Model):
     kind: Literal["resource", "note", "project"]
     title: str = Field(min_length=1, max_length=180)
-    content: str = Field(default="", max_length=50000)
+    content: Annotated[str, StringConstraints(strip_whitespace=False)] = Field(default="", max_length=50000)
     url: str = Field(default="", max_length=2000)
     tags: list[str] = Field(default_factory=list, max_length=12)
     track_id: str | None = Field(default=None, max_length=100)

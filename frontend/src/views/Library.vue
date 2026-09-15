@@ -52,7 +52,7 @@ const matching = computed(() =>
     .sort(
       (a, b) =>
         Number(b.starred) - Number(a.starred) ||
-        b.updated_at.localeCompare(a.updated_at),
+        Date.parse(b.updated_at) - Date.parse(a.updated_at),
     ),
 );
 </script>

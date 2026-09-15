@@ -35,7 +35,7 @@ const pinned = computed(() =>
 const recentNotes = computed(() =>
   entries.value
     .filter((e) => e.kind === "note")
-    .sort((a, b) => b.updated_at.localeCompare(a.updated_at))
+    .sort((a, b) => Date.parse(b.updated_at) - Date.parse(a.updated_at))
     .slice(0, 3),
 );
 const weekMinutes = computed(() => {

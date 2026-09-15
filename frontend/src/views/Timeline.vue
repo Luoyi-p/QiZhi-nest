@@ -40,7 +40,7 @@ const events = computed(() => {
         .toLowerCase()
         .includes(query.value.toLowerCase()),
     )
-    .sort((a, b) => b.date.localeCompare(a.date));
+    .sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
 });
 const groups = computed(() => {
   const result: { day: string; label: string; events: Event[] }[] = [];
@@ -97,7 +97,7 @@ function eventIcon(kind: string) {
       <div class="timeline-events">
         <article
           v-for="event in group.events"
-          :key="event.id"
+          :key="`${event.kind}-${event.id}`"
           class="timeline-event"
         >
           <div :class="['event-icon', event.kind]">

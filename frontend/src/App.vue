@@ -182,6 +182,7 @@ onBeforeUnmount(() => window.removeEventListener("keydown", keyboard));
           <button
             class="icon-button mobile-menu"
             aria-label="打开导航"
+            :aria-expanded="menuOpen"
             @click="menuOpen = true"
           >
             <Menu :size="22" /></button
