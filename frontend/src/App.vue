@@ -1,12 +1,17 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import {
+  computed,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  watch,
+} from "vue";
 import {
   ArrowUpRight,
   BookOpen,
   CheckCircle2,
-  ChevronDown,
   Code2,
-  Command,
   FileText,
   Home as HomeIcon,
   Leaf,
@@ -40,6 +45,32 @@ import { modal, navigate, openEntry, page, query } from "./ui";
 import type { Page } from "./types";
 const menuOpen = ref(false);
 const searchInput = ref<HTMLInputElement>();
+const mainContent = ref<HTMLElement>();
+const sidebar = ref<HTMLElement>();
+const menuButton = ref<HTMLButtonElement>();
+const menuCloseButton = ref<HTMLButtonElement>();
+const originalOverflow = document.body.style.overflow;
+watch(menuOpen, async (open) => {
+  document.body.style.overflow = open ? "hidden" : originalOverflow;
+  if (open) {
+    await nextTick();
+    menuCloseButton.value?.focus();
+  }
+});
+async function closeMenu() {
+  menuOpen.value = false;
+  await nextTick();
+  menuButton.value?.focus();
+}
+function resizeNavigation() {
+  if (window.innerWidth >= 1024) menuOpen.value = false;
+}
+watch(page, async () => {
+  menuOpen.value = false;
+  await nextTick();
+  mainContent.value?.focus({ preventScroll: true });
+  window.scrollTo({ top: 0, behavior: "instant" });
+});
 const navigation = computed(() => [
   { id: "home" as Page, name: "工作台", icon: HomeIcon },
   {
@@ -103,36 +134,77 @@ const searchResults = computed(() => {
 const globalSearching = computed(
   () => !!query.value.trim() && ["home", "settings"].includes(page.value),
 );
-function go(target: Page) {
+async function go(target: Page) {
   navigate(target);
   menuOpen.value = false;
+  await nextTick();
+  mainContent.value?.focus({ preventScroll: true });
 }
 function keyboard(event: KeyboardEvent) {
-  if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+  if (menuOpen.value && event.key === "Tab") {
+    const controls = sidebar.value?.querySelectorAll<HTMLElement>(
+      "a[href], button:not(:disabled)",
+    );
+    const first = controls?.[0];
+    const last = controls?.[controls.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last?.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first?.focus();
+    }
+  }
+  if (
+    !menuOpen.value &&
+    (event.ctrlKey || event.metaKey) &&
+    event.key.toLowerCase() === "k"
+  ) {
     event.preventDefault();
     searchInput.value?.focus();
   }
   if (event.key === "Escape") {
     query.value = "";
-    menuOpen.value = false;
+    if (menuOpen.value) closeMenu();
   }
 }
 onMounted(() => {
   loadWorkspace();
   window.addEventListener("keydown", keyboard);
+  window.addEventListener("resize", resizeNavigation);
 });
-onBeforeUnmount(() => window.removeEventListener("keydown", keyboard));
+onBeforeUnmount(() => {
+  window.removeEventListener("keydown", keyboard);
+  window.removeEventListener("resize", resizeNavigation);
+  document.body.style.overflow = originalOverflow;
+});
 </script>
 
 <template>
   <div class="app-shell">
+    <a
+      class="skip-link"
+      :inert="menuOpen"
+      href="#main-content"
+      @click.prevent="mainContent?.focus()"
+      >跳到主要内容</a
+    >
     <button
       v-if="menuOpen"
       class="sidebar-backdrop"
       aria-label="关闭导航"
-      @click="menuOpen = false"
+      tabindex="-1"
+      @click="closeMenu"
     />
-    <aside :class="['sidebar', { open: menuOpen }]">
+    <aside ref="sidebar" :class="['sidebar', { open: menuOpen }]">
+      <button
+        ref="menuCloseButton"
+        class="icon-button sidebar-close"
+        aria-label="收起导航"
+        @click="closeMenu"
+      >
+        <X :size="20" />
+      </button>
       <a href="#home" class="brand" @click.prevent="go('home')"
         ><span class="brand-mark"
           ><svg viewBox="0 0 32 32" aria-hidden="true">
@@ -144,7 +216,7 @@ onBeforeUnmount(() => window.removeEventListener("keydown", keyboard));
         <div>我的数字空间<small>PERSONAL WORKSPACE</small></div>
         <Leaf :size="15" />
       </div>
-      <div class="nav-caption">我的空间</div>
+      <div class="nav-caption">WORKSPACE / 我的空间</div>
       <nav aria-label="主导航">
         <a
           v-for="item in navigation"
@@ -160,13 +232,16 @@ onBeforeUnmount(() => window.removeEventListener("keydown", keyboard));
       <div class="sidebar-grow" />
       <div class="sidebar-note">
         <Sprout :size="24" />
-        <p>知识有自己的生长速度。</p>
-        <span>给好奇心一点时间，<br />给积累一个自己的家。</span>
+        <p>连接知识，也连接自己。</p>
+        <span
+          >收藏是开始，理解是过程。<br />把每一次输入，留给未来的自己。</span
+        >
         <div class="sidebar-note-line" />
       </div>
       <a
         href="#settings"
         :class="['nav-link', 'settings-link', { active: page === 'settings' }]"
+        :aria-current="page === 'settings' ? 'page' : undefined"
         @click.prevent="go('settings')"
         ><Settings2 :size="19" /><span>数据与设置</span></a
       >
@@ -176,11 +251,12 @@ onBeforeUnmount(() => window.removeEventListener("keydown", keyboard));
         <span class="local-indicator" title="本地优先应用" />
       </div>
     </aside>
-    <div class="main-shell">
+    <div class="main-shell" :inert="menuOpen">
       <header class="topbar">
         <div class="breadcrumb">
           <button
             class="icon-button mobile-menu"
+            ref="menuButton"
             aria-label="打开导航"
             :aria-expanded="menuOpen"
             @click="menuOpen = true"
@@ -229,7 +305,7 @@ onBeforeUnmount(() => window.removeEventListener("keydown", keyboard));
           </button>
         </div>
       </header>
-      <main id="main-content">
+      <main id="main-content" ref="mainContent" tabindex="-1">
         <div class="context-row">
           <span><span class="context-dot" />{{ date }}</span
           ><span v-if="showDemo" class="demo-context"

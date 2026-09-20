@@ -92,9 +92,9 @@ const stats = computed(() => [
 <template>
   <section class="page-heading home-heading">
     <div>
-      <div class="eyebrow">A LITTLE PROGRESS, EVERY DAY</div>
-      <h1>今天，继续生长<span class="heading-dot">。</span></h1>
-      <p>让学过的、想过的、做过的，都在这里连成线。</p>
+      <div class="eyebrow">YOUR KNOWLEDGE, CONNECTED.</div>
+      <h1>把好奇心，变成自己的知识<span class="heading-dot">。</span></h1>
+      <p>从一次探索到一个作品，让每一份积累都有迹可循。</p>
     </div>
     <button class="button secondary" @click="openSession()">
       <Plus :size="17" />记录学习
@@ -104,7 +104,7 @@ const stats = computed(() => [
     <section class="continue-card">
       <div class="continue-content">
         <span class="continue-label"
-          ><span class="live-dot" /> 接着上次的好奇心</span
+          ><span class="live-dot" /> 当前探索 / CONTINUE LEARNING</span
         >
         <h2>{{ currentTrack?.title || "第一条路线，从好奇开始" }}</h2>
         <p>
@@ -139,15 +139,17 @@ const stats = computed(() => [
           <strong
             >{{ currentTrack ? progress(currentTrack) : 0
             }}<small>%</small></strong
-          ><span>已走过的路</span>
+          ><span>路线进度</span>
         </div>
         <span class="orbit-caption">ONE STEP AT A TIME</span>
       </div>
     </section>
     <section class="quick-capture">
-      <div class="section-kicker"><Sparkles :size="18" />灵感不必排队</div>
-      <h2>先记下来，<br />以后会用得上。</h2>
-      <p>一个链接、一段想法，<br />给碎片信息一个落脚点。</p>
+      <div class="section-kicker">
+        <Sparkles :size="18" />QUICK CAPTURE / 随手记
+      </div>
+      <h2>让灵感，<br />有个落脚的地方。</h2>
+      <p>一个链接，一段还没成形的想法。<br />先留下，再慢慢连接。</p>
       <div class="capture-actions">
         <button @click="openEntry('resource')">
           <BookOpen :size="17" />收个资料<Plus :size="15" /></button
@@ -173,7 +175,7 @@ const stats = computed(() => [
   </section>
   <div class="section-heading">
     <h2>
-      我的常用入口
+      值得再次打开
       <span class="count">{{ entries.filter((e) => e.starred).length }}</span>
     </h2>
     <button class="text-button" @click="navigate('library')">
@@ -189,7 +191,7 @@ const stats = computed(() => [
   <div class="dashboard-bottom">
     <section class="panel activity-panel">
       <div class="section-heading">
-        <h2>积累的痕迹</h2>
+        <h2>学习足迹</h2>
         <button class="text-button" @click="navigate('timeline')">
           时间线<ArrowUpRight :size="16" />
         </button>
