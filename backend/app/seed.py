@@ -1,3 +1,4 @@
+import json
 from datetime import datetime, timedelta, timezone
 
 from .db import Database
@@ -30,7 +31,6 @@ def seed_demo(db: Database):
         for i in range(90):
             if i % 7 not in (1, 4) and i % 11 != 0:
                 records.append(("sessions", {"id": f"demo-session-{i}", "title": ["阅读文档并整理笔记", "完成一个小实验", "复习并推进学习路线"][i % 3], "minutes": [25, 45, 60, 30][i % 4], "track_id": tracks[i % 3]["id"], "created_at": (now - timedelta(days=i)).isoformat(), "demo": True}))
-        import json
         for collection, payload in records:
             conn.execute("INSERT OR IGNORE INTO documents VALUES (?, ?, ?)", (collection, payload["id"], json.dumps(payload, ensure_ascii=False)))
         conn.execute("INSERT INTO metadata VALUES ('initialized', '1')")

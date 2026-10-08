@@ -58,12 +58,12 @@ const archiveConfirm = ref(false);
 const title = computed(() =>
   modal.value === "entry"
     ? selectedEntry.value
-      ? "编辑这份积累"
-      : "捕捉新的积累"
+      ? "编辑内容"
+      : "新建内容"
     : modal.value === "track"
       ? selectedTrack.value
-        ? "我的学习路线"
-        : "开启一条学习路线"
+        ? "编辑学习路线"
+        : "新建学习路线"
       : "记录一次学习",
 );
 async function submit() {
@@ -142,7 +142,7 @@ async function archive() {
               v-model="entry.title"
               required
               maxlength="180"
-              placeholder="给这份积累起个名字"
+              placeholder="输入标题"
           /></label>
           <label v-if="entry.kind !== 'note'"
             >链接 <span class="optional">可选</span>
@@ -174,7 +174,7 @@ async function archive() {
           <div class="form-grid">
             <label
               >关联学习路线<select v-model="entry.track_id">
-                <option :value="null">独立积累</option>
+                <option :value="null">未关联路线</option>
                 <option v-for="t in tracks" :key="t.id" :value="t.id">
                   {{ t.title }}
                 </option>
@@ -218,7 +218,7 @@ async function archive() {
               v-model="track.description"
               rows="3"
               maxlength="1000"
-              placeholder="写下这条路线想抵达的地方…"
+              placeholder="简要说明学习目标和范围…"
             />
           </label>
           <label

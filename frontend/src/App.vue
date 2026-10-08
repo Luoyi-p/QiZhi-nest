@@ -232,9 +232,9 @@ onBeforeUnmount(() => {
       <div class="sidebar-grow" />
       <div class="sidebar-note">
         <Sprout :size="24" />
-        <p>连接知识，也连接自己。</p>
+        <p>随时记，定期回看。</p>
         <span
-          >收藏是开始，理解是过程。<br />把每一次输入，留给未来的自己。</span
+          >把常用资料置顶，<br />下次打开就能继续。</span
         >
         <div class="sidebar-note-line" />
       </div>
@@ -270,8 +270,8 @@ onBeforeUnmount(() => {
             <Search :size="17" /><input
               ref="searchInput"
               v-model="query"
-              placeholder="搜索你的积累…"
-              aria-label="搜索你的积累"
+              placeholder="搜索内容…"
+              aria-label="搜索内容"
             /><button
               v-if="query"
               class="icon-button search-clear"
@@ -292,7 +292,7 @@ onBeforeUnmount(() => {
                 <FileText :size="16" /><span>{{ entry.title }}</span
                 ><ArrowUpRight :size="14" />
               </button>
-              <p v-if="!searchResults.length">没有找到相关积累</p>
+              <p v-if="!searchResults.length">没有找到相关内容</p>
             </div>
           </div>
           <button
@@ -311,7 +311,7 @@ onBeforeUnmount(() => {
           ><span v-if="showDemo" class="demo-context"
             >含示例内容<button @click="go('settings')">
               管理<ArrowUpRight :size="12" /></button></span
-          ><span v-else class="demo-context">只看我的积累</span>
+          ><span v-else class="demo-context">只看我的内容</span>
         </div>
         <section v-if="loading" class="loading-state" aria-live="polite">
           <span class="loader" />

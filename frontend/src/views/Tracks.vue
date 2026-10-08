@@ -52,9 +52,9 @@ async function toggle(track: Track, index: number) {
 <template>
   <section class="page-heading">
     <div>
-      <div class="eyebrow">FOLLOW YOUR CURIOSITY</div>
+      <div class="eyebrow">LEARNING TRACKS</div>
       <h1>学习路线</h1>
-      <p>从一个想弄懂的问题开始，一步一步走到自己的答案。</p>
+      <p>把学习主题拆成里程碑，记录每一步的完成情况。</p>
     </div>
     <button class="button primary" @click="openTrack()">
       <Plus :size="17" />新建路线
@@ -79,7 +79,7 @@ async function toggle(track: Track, index: number) {
       </div>
       <h2>{{ track.title }}</h2>
       <p class="route-description">
-        {{ track.description || "留一点空间，给接下来想探索的事。" }}
+        {{ track.description || "暂无路线说明" }}
       </p>
       <div class="route-progress-label">
         <span
@@ -113,7 +113,7 @@ async function toggle(track: Track, index: number) {
         <BookOpen :size="15" /><span
           >关联
           {{ entries.filter((e) => e.track_id === track.id).length }}
-          份积累</span
+          条内容</span
         ><button class="text-button" @click="openEntry('note', null, track.id)">
           写笔记<Plus :size="14" />
         </button>
@@ -122,7 +122,7 @@ async function toggle(track: Track, index: number) {
         v-if="entries.some((e) => e.track_id === track.id)"
         class="related-details"
       >
-        <summary>查看这条路线的积累</summary>
+        <summary>查看关联内容</summary>
         <button
           v-for="entry in entries.filter((e) => e.track_id === track.id)"
           :key="entry.id"
@@ -143,7 +143,7 @@ async function toggle(track: Track, index: number) {
     </article>
     <button v-if="!query" class="new-route" @click="openTrack()">
       <span><Plus :size="28" /></span>
-      <h3>下一份好奇心</h3>
+      <h3>新建学习路线</h3>
       <p>把想学的事，变成一条清晰的路。</p>
     </button>
   </div>

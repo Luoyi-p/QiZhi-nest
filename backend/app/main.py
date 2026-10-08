@@ -15,17 +15,26 @@ from .seed import seed_demo
 
 def create_app(db_path: Path | None = None, demo: bool = True) -> FastAPI:
     api = FastAPI(title="Nest 栖知", version="0.1.0")
-    api.add_middleware(TrustedHostMiddleware, allowed_hosts=["127.0.0.1", "localhost", "testserver"])
-    path = db_path or Path(os.environ.get("NEST_DB_PATH", Path(__file__).resolve().parents[2] / "data" / "nest.db"))
+    api.add_middleware(
+        TrustedHostMiddleware, allowed_hosts=["127.0.0.1", "localhost", "testserver"]
+    )
+    path = db_path or Path(os.environ.get(
+        "NEST_DB_PATH", Path(__file__).resolve().parents[2] / "data" / "nest.db"
+    ))
     db = Database(path)
     if demo:
         seed_demo(db)
 
     @api.middleware("http")
     async def local_writes(request: Request, call_next):
-        # A local-first, single-user application. No public-network authentication is implied.
+        # Reject browser writes from other sites; this is not authentication.
         if request.method in ("POST", "PUT", "PATCH", "DELETE"):
-            allowed = {"http://127.0.0.1:5173", "http://localhost:5173", "http://127.0.0.1:8000", "http://localhost:8000"}
+            allowed = {
+                "http://127.0.0.1:5173",
+                "http://localhost:5173",
+                "http://127.0.0.1:8000",
+                "http://localhost:8000",
+            }
             origin = request.headers.get("origin")
             if origin and origin not in allowed:
                 return JSONResponse({"detail": "不允许此来源修改本地数据"}, status_code=403)
@@ -71,7 +80,11 @@ def create_app(db_path: Path | None = None, demo: bool = True) -> FastAPI:
     def update_entry(identifier: str, data: EntryInput):
         previous = require("entries", identifier)
         check_track(data.track_id)
-        return db.save("entries", {**previous, **data.model_dump(mode="json"), "updated_at": datetime.now(timezone.utc).isoformat()})
+        return db.save("entries", {
+            **previous,
+            **data.model_dump(mode="json"),
+            "updated_at": datetime.now(timezone.utc).isoformat(),
+        })
 
     @api.post("/api/sessions", response_model=Session, status_code=201)
     def create_session(data: SessionInput):
@@ -100,7 +113,10 @@ def create_app(db_path: Path | None = None, demo: bool = True) -> FastAPI:
             if len(ids) != len(set(ids)):
                 raise HTTPException(422, "备份中包含重复 ID")
         known_tracks = {t["id"] for t in db.all("tracks")} | {t.id for t in backup.tracks}
-        if any(item.track_id and item.track_id not in known_tracks for item in [*backup.entries, *backup.sessions]):
+        if any(
+            item.track_id and item.track_id not in known_tracks
+            for item in [*backup.entries, *backup.sessions]
+        ):
             raise HTTPException(422, "备份包含不存在的学习路线关联")
         count = db.merge(backup.model_dump(mode="json"))
         return {"imported": count, "message": "已合并导入；相同 ID 的本地记录保持不变"}

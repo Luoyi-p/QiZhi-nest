@@ -38,8 +38,8 @@ const activeDays = computed(
 <template>
   <div class="activity-label">
     <span
-      >最近 105 天，<strong>{{ activeDays }}</strong> 天留下了足迹</span
-    ><span class="muted">每一小步都算数</span>
+      >最近 105 天，<strong>{{ activeDays }}</strong> 天有学习记录</span
+    ><span class="muted">按每日学习分钟数统计</span>
   </div>
   <div
     class="heatmap"

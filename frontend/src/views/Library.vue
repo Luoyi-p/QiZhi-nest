@@ -19,20 +19,20 @@ const copy = computed(
     ({
       resource: {
         title: "资料库",
-        eyebrow: "COLLECT WITH INTENTION",
-        description: "值得回来的链接、教程和工具，每一份都有自己的位置。",
+        eyebrow: "RESOURCES",
+        description: "收藏的链接、教程和工具，可按标签搜索或按路线筛选。",
         action: "收藏资料",
       },
       note: {
         title: "我的笔记",
-        eyebrow: "THINK IN YOUR OWN WORDS",
-        description: "用自己的话重新理解，让别人的知识成为自己的经验。",
+        eyebrow: "NOTES",
+        description: "记录学习笔记、遇到的问题和解决方法。",
         action: "写一篇笔记",
       },
       project: {
         title: "实践项目",
-        eyebrow: "LEARN BY MAKING",
-        description: "让每一个学过的概念，都有一次真正动手的机会。",
+        eyebrow: "PROJECTS",
+        description: "整理练习项目，记录进展和相关链接。",
         action: "新建项目",
       },
     })[kind.value],
@@ -108,7 +108,7 @@ const matching = computed(() =>
   <div class="result-line">
     <span
       ><LayoutGrid :size="15" />{{ matching.length }} 份{{
-        kind === "resource" ? "资料" : kind === "note" ? "思考" : "实践"
+        kind === "resource" ? "资料" : kind === "note" ? "笔记" : "项目"
       }}</span
     ><span>置顶优先 · 最近更新</span>
   </div>
@@ -124,7 +124,7 @@ const matching = computed(() =>
       {{
         query || status !== "all" || onlyStarred || trackFilter
           ? "暂时没有匹配的内容"
-          : "给第一份积累留个位置"
+          : "还没有内容"
       }}
     </h2>
     <p>可以换个筛选条件，或把刚刚想到的内容记下来。</p>

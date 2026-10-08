@@ -73,9 +73,9 @@ function eventIcon(kind: string) {
 <template>
   <section class="page-heading">
     <div>
-      <div class="eyebrow">YOUR DAYS, CONNECTED</div>
+      <div class="eyebrow">TIMELINE</div>
       <h1>成长时间线</h1>
-      <p>收藏是起点，理解是过程，实践让每一天有迹可循。</p>
+      <p>按日期查看学习记录、新增资料、笔记和项目。</p>
     </div>
     <button class="button primary" @click="openSession()">
       <Plus :size="17" />记录学习
@@ -83,7 +83,7 @@ function eventIcon(kind: string) {
   </section>
   <section class="panel timeline-activity">
     <div class="section-heading">
-      <h2>回头看，已经走了这么远</h2>
+      <h2>学习活动</h2>
       <span class="muted">{{ sessions.length }} 次学习记录</span>
     </div>
     <ActivityGrid />

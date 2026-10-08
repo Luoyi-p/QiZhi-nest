@@ -1,4 +1,8 @@
 * text=auto
+.gitattributes text eol=lf
+.gitignore text eol=lf
+*.html text eol=lf
+*.ini text eol=lf
 *.py text eol=lf
 *.ts text eol=lf
 *.vue text eol=lf

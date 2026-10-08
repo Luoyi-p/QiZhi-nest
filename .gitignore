@@ -5,6 +5,8 @@ __pycache__/
 .pytest_cache/
 *.pyc
 .env
+.env.*
+!.env.example
 data/
 *.db
 *.db-shm
@@ -14,3 +16,4 @@ test-results/
 playwright-report/
 .npm-cache/
 .DS_Store
+Thumbs.db

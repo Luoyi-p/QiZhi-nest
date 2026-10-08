@@ -92,22 +92,22 @@ async function restore(id: string, kind: "entry" | "track") {
 <template>
   <section class="page-heading">
     <div>
-      <div class="eyebrow">YOURS, BY DESIGN</div>
+      <div class="eyebrow">DATA & SETTINGS</div>
       <h1>我的数据</h1>
-      <p>学习留下的东西，应当一直掌握在自己手里。</p>
+      <p>备份数据、管理示例内容和恢复归档记录。</p>
     </div>
   </section>
   <div class="settings-grid">
     <section class="panel settings-panel">
       <span class="settings-icon"><HardDrive :size="26" /></span>
-      <h2>本地优先，安心积累</h2>
+      <h2>本地存储</h2>
       <p>
         资料、笔记、路线和学习记录保存在这台电脑的 SQLite
         数据库里。应用不会自动把内容同步到第三方。
       </p>
       <div class="storage-summary">
         <span
-          ><strong>{{ workspace.entries.length }}</strong> 份积累</span
+          ><strong>{{ workspace.entries.length }}</strong> 条内容</span
         ><span
           ><strong>{{ workspace.tracks.length }}</strong> 条路线</span
         ><span
@@ -118,10 +118,10 @@ async function restore(id: string, kind: "entry" | "track") {
     </section>
     <section class="panel settings-panel">
       <span class="settings-icon blue"><Database :size="26" /></span>
-      <h2>让数据跟着你走</h2>
+      <h2>导入与导出</h2>
       <p>
         导出 JSON
-        保存完整备份；在另一台电脑导入，就能继续积累。导入采用合并方式，相同 ID
+        保存完整备份，也可用于迁移到另一台电脑。导入采用合并方式，相同 ID
         的记录不会覆盖本地版本。
       </p>
       <div class="backup-actions">
@@ -149,7 +149,7 @@ async function restore(id: string, kind: "entry" | "track") {
     <div>
       <h2>示例内容</h2>
       <p>
-        首次使用附带一组学习示例。关闭后，工作区和统计只展示你的真实积累；示例数据仍会保留在备份中。
+        首次使用附带一组学习示例。关闭后，工作区和统计只展示你的记录；示例数据仍会保留在备份中。
       </p>
     </div>
     <label class="toggle"
@@ -208,7 +208,6 @@ async function restore(id: string, kind: "entry" | "track") {
     </div>
   </section>
   <p class="settings-footnote">
-    当前为单人本地版本，尚未加入登录与跨设备同步。个人备份与数据库已配置为不随
-    Git 提交。
+    当前为单人本地版本，不支持自动同步。迁移数据前，请先导出备份。
   </p>
 </template>

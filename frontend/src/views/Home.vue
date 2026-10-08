@@ -57,11 +57,11 @@ const stats = computed(() => [
     value: tracks.value.filter((t) => progress(t) < 100).length,
     unit: "条",
     icon: Flag,
-    note: "找到方向，慢慢深入",
+    note: "按里程碑跟进进度",
     tone: "green",
   },
   {
-    label: "我的数字积累",
+    label: "已保存内容",
     value: entries.value.length,
     unit: "份",
     icon: BookOpen,
@@ -77,13 +77,13 @@ const stats = computed(() => [
     tone: "orange",
   },
   {
-    label: "实践中的想法",
+    label: "未完成项目",
     value: entries.value.filter(
       (e) => e.kind === "project" && e.status !== "done",
     ).length,
     unit: "个",
     icon: Code2,
-    note: "把输入，变成自己的作品",
+    note: "包含待探索和进行中的项目",
     tone: "purple",
   },
 ]);
@@ -92,9 +92,9 @@ const stats = computed(() => [
 <template>
   <section class="page-heading home-heading">
     <div>
-      <div class="eyebrow">YOUR KNOWLEDGE, CONNECTED.</div>
-      <h1>把好奇心，变成自己的知识<span class="heading-dot">。</span></h1>
-      <p>从一次探索到一个作品，让每一份积累都有迹可循。</p>
+      <div class="eyebrow">WORKSPACE</div>
+      <h1>我的学习工作台</h1>
+      <p>查看学习进度，接着上次的内容继续。</p>
     </div>
     <button class="button secondary" @click="openSession()">
       <Plus :size="17" />记录学习
@@ -104,23 +104,23 @@ const stats = computed(() => [
     <section class="continue-card">
       <div class="continue-content">
         <span class="continue-label"
-          ><span class="live-dot" /> 当前探索 / CONTINUE LEARNING</span
+          ><span class="live-dot" /> 当前路线</span
         >
-        <h2>{{ currentTrack?.title || "第一条路线，从好奇开始" }}</h2>
+        <h2>{{ currentTrack?.title || "创建第一条学习路线" }}</h2>
         <p>
           {{
             currentTrack?.description ||
-            "选一个真正想弄懂的主题，拆成几个可以完成的小步骤。"
+            "选择一个学习主题，添加要完成的步骤。"
           }}
         </p>
         <div v-if="currentTrack" class="next-step">
-          <span>下一步</span>{{ nextStep || "完成一轮学习，回顾自己的收获" }}
+          <span>下一步</span>{{ nextStep || "查看路线，整理后续计划" }}
         </div>
         <button
           class="button lime"
           @click="currentTrack ? openTrack(currentTrack) : openTrack()"
         >
-          {{ currentTrack ? "继续我的路线" : "创建学习路线"
+          {{ currentTrack ? "查看路线" : "创建学习路线"
           }}<ArrowUpRight :size="18" />
         </button>
       </div>
@@ -141,20 +141,20 @@ const stats = computed(() => [
             }}<small>%</small></strong
           ><span>路线进度</span>
         </div>
-        <span class="orbit-caption">ONE STEP AT A TIME</span>
+        <span class="orbit-caption">PROGRESS</span>
       </div>
     </section>
     <section class="quick-capture">
       <div class="section-kicker">
         <Sparkles :size="18" />QUICK CAPTURE / 随手记
       </div>
-      <h2>让灵感，<br />有个落脚的地方。</h2>
-      <p>一个链接，一段还没成形的想法。<br />先留下，再慢慢连接。</p>
+      <h2>收藏资料，<br />记下想法。</h2>
+      <p>保存正在看的链接，<br />或写一篇简短的笔记。</p>
       <div class="capture-actions">
         <button @click="openEntry('resource')">
-          <BookOpen :size="17" />收个资料<Plus :size="15" /></button
+          <BookOpen :size="17" />收藏资料<Plus :size="15" /></button
         ><button @click="openEntry('note')">
-          <FileText :size="17" />写点想法<Plus :size="15" />
+          <FileText :size="17" />新建笔记<Plus :size="15" />
         </button>
       </div>
     </section>
@@ -175,7 +175,7 @@ const stats = computed(() => [
   </section>
   <div class="section-heading">
     <h2>
-      值得再次打开
+      置顶内容
       <span class="count">{{ entries.filter((e) => e.starred).length }}</span>
     </h2>
     <button class="text-button" @click="navigate('library')">
@@ -200,7 +200,7 @@ const stats = computed(() => [
     </section>
     <section class="panel recent-panel">
       <div class="section-heading">
-        <h2>最近的思考</h2>
+        <h2>最近笔记</h2>
         <button class="text-button" @click="navigate('notes')">
           <span class="sr-only">查看全部笔记</span><ArrowUpRight :size="18" />
         </button>
@@ -226,8 +226,8 @@ const stats = computed(() => [
     </section>
   </div>
   <footer class="page-footer">
-    <span><Check :size="14" />积累保存在本机</span
-    ><span>不急着抵达，先认真走好这一小步。</span
+    <span><Check :size="14" />数据保存在本机</span
+    ><span>可在「数据与设置」中导出备份。</span
     ><span>NEST / PERSONAL SPACE</span>
   </footer>
 </template>

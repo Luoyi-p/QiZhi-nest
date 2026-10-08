@@ -45,7 +45,7 @@ export const sessions = computed(() =>
   workspace.value.sessions.filter((s) => showDemo.value || !s.demo),
 );
 export function trackName(id: string | null) {
-  return workspace.value.tracks.find((t) => t.id === id)?.title || "独立积累";
+  return workspace.value.tracks.find((t) => t.id === id)?.title || "未关联路线";
 }
 export function progress(track: Track) {
   return track.milestones.length
